@@ -53,8 +53,6 @@ enum MemInfoOrder {
     MIO_LAST
  };
 
-static int memData[MIO_LAST];
-
 std::vector<std::string> CpuUtilization();
 long Jiffies();
 long ActiveJiffies();

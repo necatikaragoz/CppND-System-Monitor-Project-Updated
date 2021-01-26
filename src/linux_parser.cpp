@@ -11,6 +11,10 @@ using std::string;
 using std::to_string;
 using std::vector;
 
+namespace LinuxParser {
+static int memData[MIO_LAST];
+};
+
 // DONE: An example of how to read data from the filesystem
 string LinuxParser::OperatingSystem() {
   string line;
@@ -85,11 +89,11 @@ float LinuxParser::MemoryUtilization() {
 
     }
   }
-  float utilization = (memData[MIO_MemTotal] -
-                      memData[MIO_MemFree] -
-                      memData[MIO_Buffers] -
-                      memData[MIO_Cached]) /
-                      (memData[MIO_MemTotal] * 1.0);
+  float utilization = (memData[MemInfoOrder::MIO_MemTotal] -
+                      memData[MemInfoOrder::MIO_MemFree] -
+                      memData[MemInfoOrder::MIO_Buffers] -
+                      memData[MemInfoOrder::MIO_Cached]) /
+                      (memData[MemInfoOrder::MIO_MemTotal] * 1.0);
 
   return utilization;
 }
