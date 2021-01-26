@@ -12,29 +12,27 @@ using std::to_string;
 using std::vector;
 
 
-Process::Process(const int pid) : mPid(pid) {
+void Process::CalculateCpuUtilization(const long totalJiffies) {
+  const float activeJiffies = (float)LinuxParser::ActiveJiffies(mPid);
+  mCpuUtil = activeJiffies / totalJiffies;
+}
+
+
+Process::Process(const int pid, const long totalJiffies) : mPid(pid) {
   // COMPLETED: maybe generate all the parser operation in here and in the other funcitons return only the value
   mCommand = LinuxParser::Command(pid);
   mRam = LinuxParser::Ram(pid);
   mUpTime = LinuxParser::UpTime(pid);
   mUser = LinuxParser::User(pid);
 
-  long seconds = LinuxParser::UpTime() - mUpTime;
-  long totaltime = LinuxParser::ActiveJiffies(pid);
-  try {
-    mCpuUtil = float(totaltime) / float(seconds);
+  CalculateCpuUtilization(totalJiffies);
 
-  } catch (...) {
-    mCpuUtil = 0;
-  }
 }
 
 // COMPLETED: Return this process's ID
 int Process::Pid() { 
     return mPid; 
     }
-
-
 
 // COMPLETED: Return this process's CPU utilization
 float Process::CpuUtilization() { return this->mCpuUtil; }
@@ -51,7 +49,7 @@ string Process::User() {  return LinuxParser::User(this->mPid);}
 // COMPLETED: Return the age of this process (in seconds)
 long int Process::UpTime() { return LinuxParser::UpTime(this->mPid);  }
 
-// TOCOMPLETEDDO: Overload the "less than" comparison operator for Process objects
+// COMPLETEDDO: Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& a) const { 
-    return (this->mCpuUtil > a.mCpuUtil) ;
+    return (this->mCpuUtil < a.mCpuUtil) ;
 }

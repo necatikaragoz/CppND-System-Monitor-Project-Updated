@@ -28,15 +28,12 @@ vector<Process>& System::Processes() {
   processes_.clear();
 
   // generate process
-
-  for (size_t pidNo = 0; pidNo < pids.size(); ++pidNo) {
-    
-    Process prc(pids.at(pidNo));
-    processes_.push_back(prc);
-    
+  for (size_t i = 0; i < pids.size(); ++i) {
+    processes_.emplace_back(pids.at(i), cpu_.TotalJiffies());
   }
 
-  //std::sort(processes_.rbegin(), processes_.rend());
+  // sorting for cpu utilization
+  std::sort(processes_.rbegin(), processes_.rend());
 
   return processes_; 
 }

@@ -9,7 +9,7 @@ It contains relevant attributes as shown below
 class Process {
  public:
 
-  Process(const int pid);
+  Process(const int pid, const long totalJiffies);
 
   int Pid();                               // COMPLETED: See src/process.cpp
   std::string User();                      // COMPLETED: See src/process.cpp
@@ -28,6 +28,8 @@ class Process {
     long mUpTime;
     float mUtilization;
     std::string mRam;
+
+    void CalculateCpuUtilization(const long totalJiffies);
   
 
 };
