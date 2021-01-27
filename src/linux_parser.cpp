@@ -101,7 +101,7 @@ float LinuxParser::MemoryUtilization() {
 // COMPLETED: Read and return the system uptime
 long LinuxParser::UpTime() { 
 //NOTE: this funciton returns a long 
-  string systemTime;
+  long systemTime;
   string line;
   std::ifstream stream(kProcDirectory + kUptimeFilename);
   if (stream.is_open()) {
@@ -110,7 +110,7 @@ long LinuxParser::UpTime() {
     linestream >> systemTime;
   }
   //if stream doesn't open then return 0
-  return std::stol(systemTime);
+  return systemTime;
 }
 
 // COMPLETED: Read and return the number of jiffies for the system
@@ -197,18 +197,18 @@ int LinuxParser::TotalProcesses() {
   if (stream.is_open()) {
     string line;
     string localKey;
-    string value;
+    int value;
     while (std::getline(stream, line)) {
       std::istringstream linestream(line);
 
       while (linestream >> localKey >> value) {
         if (localKey == KEY_TOTAL_PROCESS) {
-          return std::stoi(value);
+          return value;
         }
       }
     }
   }
-  return std::stoi("0");
+  return 0;
 }
 
 // COMPLETED: Read and return the number of running processes
@@ -218,18 +218,18 @@ int LinuxParser::RunningProcesses() {
   if (stream.is_open()) {
     string line;
     string localKey;
-    string value;
+    int value;
     while (std::getline(stream, line)) {
       std::istringstream linestream(line);
 
       while (linestream >> localKey >> value) {
         if (localKey == KEY_RUNNING_PROCESS) {
-          return std::stoi(value);
+          return value;
         }
       }
     }
   }
-  return std::stoi("0");
+  return 0;
 }
 
 std::string GetKeyValue( std::string &path , std::string &key)  {
@@ -277,24 +277,24 @@ string LinuxParser::Ram(int pid) {
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatusFilename);
   
   string key, line;
-  string value;
+  int value;
   std::string KEY_RAM_SIZE {"VmSize:"};
 
   if (filestream.is_open()) {
 
     while (std::getline(filestream, line)) {
 
-      std::stringstream linestream(line);
+      std::istringstream linestream(line);
 
       while (linestream >> key >> value) {
         
         if (key == KEY_RAM_SIZE) {
-          return value ;
+          return to_string(value / 1024);
         }
       }
     }
   }
-  return value;
+  return "0";
 }
 
 // COMPLETED: Read and return the user ID associated with a process
@@ -344,16 +344,24 @@ long LinuxParser::UpTime(int pid) {
 
   string key, line;
   long int value{0};
+  int utime  = 14;
+  int starttime = 22;
+  
+
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
     std::istringstream linestream(line);
-    for (int i = 0; i < 21; ++i) {
+    for (int i = 0; i < (utime-1) ; ++i) {
       linestream >> key;
     }
-    linestream >> value;
-    value = value / sysconf(_SC_CLK_TCK);
-    return value;
+    // utime updated
+    linestream >>  utime >> value;
+
+    value = (value + utime) ;/// sysconf(_SC_CLK_TCK);
+
+   // std::cout << "utime = " << utime << " value = " << value << "\n";
+    return utime;
   }
   return value;
 
