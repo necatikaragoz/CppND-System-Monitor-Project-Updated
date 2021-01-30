@@ -349,18 +349,12 @@ long LinuxParser::UpTime(int pid) {
     std::getline(filestream, line);
     std::istringstream linestream(line);
 
-    long utime, stime, cutime, cstime, starttime;
-   /* for (int i = 0; i < 14; ++i) {
-      linestream >> key;
-    }
-      linestream >> utime >> stime >> cutime >> cstime;
-*/
+    long starttime;
     for (int i = 0; i < 21; ++i) {
       linestream >> key;
     }
     linestream >> starttime;
 
-    value = (utime + stime + cutime + cstime);
     value = starttime / sysconf(_SC_CLK_TCK);
     return value;
   }
@@ -378,7 +372,7 @@ long LinuxParser::OperationTime(int pid) {
     std::getline(filestream, line);
     std::istringstream linestream(line);
 
-    long utime, stime, cutime, cstime, starttime;
+    long utime, stime, cutime, cstime;
     for (int i = 0; i < 14; ++i) {
       linestream >> key;
     }
