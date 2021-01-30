@@ -17,10 +17,12 @@ void Test_LinuxParser()
 
 void Test_PID()
 {
-    std::cout << "LinuxParser::Ram = " << LinuxParser::Ram(7141) << "\n";
-    std::cout << "LinuxParser::Uid = " << LinuxParser::Uid(7141) << "\n";
-    std::cout << "LinuxParser::User = " << LinuxParser::User(7141) << "\n";
-    std::cout << "LinuxParser::ActiveJiffies = " << LinuxParser::ActiveJiffies(7141) << "\n";
+    std::cout << "LinuxParser::Ram = " << LinuxParser::Ram(2012) << "\n";
+    std::cout << "LinuxParser::Uid = " << LinuxParser::Uid(2012) << "\n";
+    std::cout << "LinuxParser::User = " << LinuxParser::User(2012) << "\n";
+    std::cout << "LinuxParser::ActiveJiffies = " << LinuxParser::ActiveJiffies(2012) << "\n";
+    std::cout << "LinuxParser::UpTime      = " << LinuxParser::UpTime() << "\n";
+    std::cout << "LinuxParser::UpTime 2012 = " << LinuxParser::UpTime(2012) << "\n";
     
     
 }

@@ -28,6 +28,7 @@ int RunningProcesses();
 std::string OperatingSystem();
 std::string Kernel();
 
+
 // CPU
 enum CPUStates {
   kUser_ = 0,
@@ -65,6 +66,7 @@ std::string Ram(int pid);
 std::string Uid(int pid);
 std::string User(int pid);
 long int UpTime(int pid);
+long OperationTime(int pid);
 
 
 // userDefined

@@ -35,7 +35,11 @@ int Process::Pid() {
     }
 
 // COMPLETED: Return this process's CPU utilization
-float Process::CpuUtilization() { return this->mCpuUtil; }
+float Process::CpuUtilization() { 
+
+float utilTime = (LinuxParser::OperationTime(this->mPid) * 1.0) / this->UpTime() ;
+  return utilTime ;
+  }
 
 // COMPLETED: Return the command that generated this process
 string Process::Command() { return LinuxParser::Command(this->mPid); }
@@ -47,7 +51,10 @@ string Process::Ram() { return LinuxParser::Ram(this->mPid); }
 string Process::User() {  return LinuxParser::User(this->mPid);}
 
 // COMPLETED: Return the age of this process (in seconds)
-long int Process::UpTime() { return LinuxParser::UpTime(this->mPid);  }
+long int Process::UpTime() { 
+
+  long uptime = (LinuxParser::UpTime() - LinuxParser::UpTime(this->mPid) );  
+ return  uptime; }
 
 // COMPLETEDDO: Overload the "less than" comparison operator for Process objects
 bool Process::operator<(Process const& a) const { 

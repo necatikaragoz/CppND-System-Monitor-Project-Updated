@@ -344,24 +344,49 @@ long LinuxParser::UpTime(int pid) {
 
   string key, line;
   long int value{0};
-  int utime  = 14;
-  int starttime = 22;
-  
-
   std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
   if (filestream.is_open()) {
     std::getline(filestream, line);
     std::istringstream linestream(line);
-    for (int i = 0; i < (utime-1) ; ++i) {
+
+    long utime, stime, cutime, cstime, starttime;
+   /* for (int i = 0; i < 14; ++i) {
       linestream >> key;
     }
-    // utime updated
-    linestream >>  utime >> value;
+      linestream >> utime >> stime >> cutime >> cstime;
+*/
+    for (int i = 0; i < 21; ++i) {
+      linestream >> key;
+    }
+    linestream >> starttime;
 
-    value = (value + utime) ;/// sysconf(_SC_CLK_TCK);
+    value = (utime + stime + cutime + cstime);
+    value = starttime / sysconf(_SC_CLK_TCK);
+    return value;
+  }
+  return value;
 
-   // std::cout << "utime = " << utime << " value = " << value << "\n";
-    return utime;
+}
+
+
+long LinuxParser::OperationTime(int pid) { 
+
+  string key, line;
+  long int value{0};
+  std::ifstream filestream(kProcDirectory + to_string(pid) + kStatFilename);
+  if (filestream.is_open()) {
+    std::getline(filestream, line);
+    std::istringstream linestream(line);
+
+    long utime, stime, cutime, cstime, starttime;
+    for (int i = 0; i < 14; ++i) {
+      linestream >> key;
+    }
+    linestream >> utime >> stime >> cutime >> cstime;
+
+    
+    value = (utime + stime + cutime + cstime) / sysconf(_SC_CLK_TCK);
+    return value;
   }
   return value;
 
